@@ -1,0 +1,10 @@
+$expense-background-color: rgba(238, 75, 10, 0.63);
+$income-background-color: lightgreen;
+
+.income {
+  background-color: $income-background-color;
+}
+
+.expense {
+  background-color: $expense-background-color;
+}
