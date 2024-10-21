@@ -1,5 +1,5 @@
 export interface RecordI {
-  icon: string,
+  icon?: string,
   name: string,
   category: string,
   amount: number,
