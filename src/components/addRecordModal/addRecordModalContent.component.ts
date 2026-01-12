@@ -30,20 +30,19 @@ export class AddRecordComponent {
 */
 
 @Component({
-  selector: 'add-record-form-content',
-  templateUrl: './addRecordModalContent.component.html',
-  standalone: true,
-  imports: [
-    MatFormFieldModule,
-    MatInputModule,
-    MatRadioModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatButtonModule
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: ['./addRecordModalContent.component.scss']
+    selector: 'add-record-form-content',
+    templateUrl: './addRecordModalContent.component.html',
+    imports: [
+        MatFormFieldModule,
+        MatInputModule,
+        MatRadioModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatButtonModule
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    styleUrls: ['./addRecordModalContent.component.scss']
 })
 export class AddRecordContentComponent {
   dialogRef = inject(MatDialogRef<AddRecordContentComponent>)

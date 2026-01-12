@@ -8,11 +8,10 @@ import { BalanceWalletComponent } from "../../components/balance/balance.compone
 import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
-  selector: 'home-wallet',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  imports: [RecordComponent, NgFor, MatDialogModule, BalanceWalletComponent, MatDividerModule],
-  standalone: true
+    selector: 'home-wallet',
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    imports: [RecordComponent, NgFor, MatDialogModule, BalanceWalletComponent, MatDividerModule]
 })
 export class HomePage {
   public records: Array<RecordI> = []
