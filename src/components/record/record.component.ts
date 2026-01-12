@@ -4,12 +4,11 @@ import { RecordI } from "./record.interface";
 import { NgClass } from "@angular/common";
 
 @Component({
-  selector: 'record-wallet',
-  standalone: true,
-  imports: [MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardTitleGroup, NgClass],
-  templateUrl: './record.component.html',
-  styleUrls: ['./record.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'record-wallet',
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardTitleGroup, NgClass],
+    templateUrl: './record.component.html',
+    styleUrls: ['./record.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RecordComponent {
   @Input('data') data!: RecordI;

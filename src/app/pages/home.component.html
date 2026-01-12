@@ -2,8 +2,10 @@
   <balance-wallet [total]="balanceTotal"></balance-wallet>
   <mat-divider></mat-divider>
   <br/>
-  <div *ngFor="let record of records;">
-    <record-wallet [data]=record></record-wallet>
-  </div>
+  @for (record of records; track record) {
+    <div>
+      <record-wallet [data]=record></record-wallet>
+    </div>
+  }
   <button (click)="openDialog()">Test</button>
 </div>

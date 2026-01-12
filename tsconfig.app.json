@@ -5,7 +5,7 @@
   "compilerOptions": {
     "outDir": "./out-tsc/app",
     "types": [
-      "node"
+      "node" // Solo deja 'node' si usas SSR, de lo contrario puedes dejarlo vacío []
     ]
   },
   "files": [
@@ -17,3 +17,4 @@
     "src/**/*.d.ts"
   ]
 }
+
