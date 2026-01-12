@@ -1,7 +1,7 @@
 import { Component, inject } from "@angular/core";
 import { RecordComponent } from "../../components/record/record.component";
 import { RecordI } from "../../components/record/record.interface";
-import { NgFor } from "@angular/common";
+
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { AddRecordContentComponent } from "../../components/addRecordModal/addRecordModalContent.component";
 import { BalanceWalletComponent } from "../../components/balance/balance.component";
@@ -11,7 +11,7 @@ import { MatDividerModule } from '@angular/material/divider';
     selector: 'home-wallet',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
-    imports: [RecordComponent, NgFor, MatDialogModule, BalanceWalletComponent, MatDividerModule]
+    imports: [RecordComponent, MatDialogModule, BalanceWalletComponent, MatDividerModule]
 })
 export class HomePage {
   public records: Array<RecordI> = []
