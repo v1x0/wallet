@@ -3,11 +3,14 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "dev": "ng serve --host 0.0.0.0",
+    "dev": "ng serve --port 4201",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:wallet-angular": "node dist/wallet-angular/server/server.mjs"
+    "serve:ssr:wallet-angular": "node dist/wallet-angular/server/server.mjs",
+    "start": "ng serve --port 4201",
+    "build:fed": "ng build --configuration production",
+    "analyze": "ng build --stats-json && webpack-bundle-analyzer dist/wallet-angular/stats.json"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +26,9 @@
     "@angular/platform-server": "^21.0.8",
     "@angular/router": "^21.0.8",
     "@angular/ssr": "^21.0.5",
+    "@softarc/native-federation-node": "^3.3.4",
+    "cors": "^2.8.5",
+    "es-module-shims": "^1.5.12",
     "express": "^4.18.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
@@ -31,6 +37,7 @@
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "^2.2.1",
     "@analogjs/vitest-angular": "^2.2.1",
+    "@angular-architects/native-federation": "^21.0.4",
     "@angular-devkit/build-angular": "^21.0.5",
     "@angular-devkit/core": "^21.0.5",
     "@angular-devkit/schematics": "^21.0.5",
