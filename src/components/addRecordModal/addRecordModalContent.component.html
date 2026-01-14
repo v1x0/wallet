@@ -10,9 +10,8 @@
     </mat-form-field>
     <mat-form-field floatLabel="always" class="form-group-add-record">
       <mat-label>Amount</mat-label>
-      <input matInput type="text" class="example-right-align" placeholder="0" formControlName="amount" />
+      <input matInput type="number" step="0.1" style="text-align: end;" placeholder="0" formControlName="amount" />
       <span matTextPrefix>$&nbsp;</span>
-      <span matTextSuffix>.00</span>
     </mat-form-field>
     <mat-radio-group formControlName="type" class="form-group-add-record">
       <mat-radio-button value="expense">Expense</mat-radio-button>

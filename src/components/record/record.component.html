@@ -3,7 +3,7 @@
     <mat-card-title-group>
       <mat-card-title>{{data.name}}</mat-card-title>
       <mat-card-subtitle>{{data.category}}</mat-card-subtitle>
-      <p>{{data.type === 'expense' ? '-' : ''}}{{data.amount}}</p>
+      <p>{{data.type === 'expense' ? '-' : ''}}{{data.amount | currency:'MXN':'$'}}</p>
     </mat-card-title-group>
   </mat-card-header>
 </mat-card>
