@@ -1,10 +1,10 @@
 <div class="container">
-  <balance-wallet [total]="balanceTotal"></balance-wallet>
+  <vixo-balance-ui [total]="balanceTotal"></vixo-balance-ui>
   <mat-divider></mat-divider>
   <br/>
   @for (record of records; track record) {
     <div>
-      <record-wallet [data]=record></record-wallet>
+      <vixo-record-modal-ui [data]=record></vixo-record-modal-ui>
     </div>
   }
   <button (click)="openDialog()">Test</button>
