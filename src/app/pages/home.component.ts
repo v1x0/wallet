@@ -1,20 +1,21 @@
-import { Component, inject } from "@angular/core";
-import { VixoBalanceUI, RecordModalComponent, RecordModalI} from "vixo-library-ui";
+import { ChangeDetectorRef, Component, inject } from "@angular/core";
+import { VixoBalanceUI, RecordModalComponent, RecordModalI, AddRecordContentComponent } from "vixo-library-ui";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatDividerModule } from '@angular/material/divider';
-import { AddRecordContentComponent } from "../../components/addRecordModal/addRecordModalContent.component";
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
     selector: 'home-wallet',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
-    imports: [MatDialogModule, VixoBalanceUI, RecordModalComponent, MatDividerModule]
+    standalone: true,
+    imports: [MatDialogModule, VixoBalanceUI, RecordModalComponent, MatDividerModule, MatButtonModule]
 })
 export class HomePage {
   public records: Array<RecordModalI> = []
   readonly dialog = inject(MatDialog);
   balanceTotal: number = 0
-  constructor() {
+  constructor(private readonly cdr: ChangeDetectorRef) {
     this.records.push({
       amount: 10,
       category: 'simple',
@@ -37,6 +38,7 @@ export class HomePage {
   }
 
   openDialog(): void {
+    console.log('hola mundo')
     const dialogRef = this.dialog.open(AddRecordContentComponent);
     dialogRef.afterClosed().subscribe((result: RecordModalI) => {
       if (result !== undefined) {
@@ -46,5 +48,6 @@ export class HomePage {
       }
       this.getBalance()
     });
+    this.cdr.detectChanges()
   }
 }

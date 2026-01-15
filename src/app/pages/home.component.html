@@ -3,9 +3,11 @@
   <mat-divider></mat-divider>
   <br/>
   @for (record of records; track record) {
-    <div>
+    <div class="record-item">
       <vixo-record-modal-ui [data]=record></vixo-record-modal-ui>
     </div>
   }
-  <button (click)="openDialog()">Test</button>
+  <div class="button-container">
+    <button mat-raised-button (click)="openDialog()" class="add-record-button">Agregar Record</button>
+  </div>
 </div>

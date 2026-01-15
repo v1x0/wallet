@@ -5,3 +5,19 @@
   margin: auto;
   width: 500px;
 }
+
+.container>.record-item {
+  margin-top: 10px;
+}
+
+.container>.button-container {
+  margin-top: 10px;
+  display: block;
+  width: 100%;
+}
+
+.button-container>.add-record-button {
+  margin: auto;
+  margin-right: 0;
+  display: block;
+}
