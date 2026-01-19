@@ -8,7 +8,7 @@ module.exports = withNativeFederation({
   },
 
   shared: {
-    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+    ...shareAll({ singleton: true, strictVersion: false, requiredVersion: 'auto' }),
   },
 
   skip: [
@@ -27,5 +27,8 @@ module.exports = withNativeFederation({
     // issues with node libs. Comment this out to
     // get the traditional behavior:
     ignoreUnusedDeps: true
-  }
+  },
+  
+  publicPath: 'v1x0.github.io' 
+
 });
