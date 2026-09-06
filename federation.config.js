@@ -3,7 +3,6 @@ const { withNativeFederation, shareAll } = require('@angular-architects/native-f
 module.exports = withNativeFederation({
   name: 'wallet-angular',
   exposes: {
-    // './AppComponent': './src/app/app.component.ts',
     './routes': './src/app/app.routes.ts'
   },
 
@@ -29,6 +28,6 @@ module.exports = withNativeFederation({
     ignoreUnusedDeps: true
   },
   
-  publicPath: 'v1x0.github.io' 
+  publicPath: 'v1x0.github.io'
 
 });
