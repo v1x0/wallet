@@ -7,9 +7,17 @@ module.exports = withNativeFederation({
     './routes': './src/app/app.routes.ts'
   },
 
-  shared: {
-    ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+  remotes: {
+    "components-shared": "http://localhost:4202/remoteEntry.json"
   },
+
+  // 🚀 Replicamos la configuración profunda para unificar el entorno en el navegador
+  shared: shareAll({ 
+    singleton: true, 
+    strictVersion: true, 
+    requiredVersion: 'auto',
+    includeSecondaries: true
+  }),
 
   skip: [
     'rxjs/ajax',

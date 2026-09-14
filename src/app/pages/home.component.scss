@@ -5,3 +5,11 @@
   margin: auto;
   width: 500px;
 }
+
+vixo-balance-ui, 
+vixo-transaction-item-ui, 
+vixo-transaction-dialog-ui {
+  display: block !important;
+  width: 100% !important;
+  min-height: 50px;
+}
