@@ -6,10 +6,9 @@
   width: 500px;
 }
 
-vixo-balance-ui, 
-vixo-transaction-item-ui, 
-vixo-transaction-dialog-ui {
+vixo-balance-ui {
   display: block !important;
-  width: 100% !important;
-  min-height: 50px;
+  min-height: 100px;  /* 🚀 Asegura un área mínima visible en pantalla */
+  width: 100%;
+  visibility: visible !important;
 }

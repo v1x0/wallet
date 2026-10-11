@@ -6,3 +6,4 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/home.component').then(m => m.HomePage)
   }
 ];
+

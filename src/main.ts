@@ -1,10 +1,8 @@
-// src/main.ts
 import { initFederation } from '@angular-architects/native-federation';
 import { environment } from './environments/enviroments';
 
-// 💡 Al estar en 'public/', se sirve directo en la raíz del puerto 4201
 initFederation({
-  SharedModule: `${environment.sharedModule.baseURl}/${environment.sharedModule.remoteEntry}`
+  SharedModule: `${environment.sharedModule.baseURl}${environment.sharedModule.remoteEntry}`
 })
   .catch(err => console.error('Error cargando manifest:', err))
   .then(_ => import('./bootstrap'))

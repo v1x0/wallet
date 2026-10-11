@@ -8,7 +8,8 @@ module.exports = withNativeFederation({
   },
 
   remotes: {
-    "components-shared": "http://localhost:4202/remoteEntry.json"
+    // "components-shared": "http://localhost:4202/remoteEntry.json"
+    "components-shared": "/v1/shared/remoteEntry.json"
   },
 
   // 🚀 Replicamos la configuración profunda para unificar el entorno en el navegador
@@ -34,6 +35,7 @@ module.exports = withNativeFederation({
     // New feature for more performance and avoiding
     // issues with node libs. Comment this out to
     // get the traditional behavior:
-    ignoreUnusedDeps: true
+    ignoreUnusedDeps: true,
+    denseChunking: true
   }
 });

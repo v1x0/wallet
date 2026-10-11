@@ -15,6 +15,14 @@
  <div style="width: 60%;margin: auto; text-align: center;">
   <h1>Panel de Control de la Billetera</h1>
   <vixo-balance-ui [attr.total]="balanceTotal"></vixo-balance-ui>
+  <vixo-transaction-item-ui
+    [attr.type]="tx.type"
+    [attr.logoUrl]="tx.logoUrl"
+    [attr.motivo]="tx.motivo"
+    [attr.subtitulo]="tx.subtitulo"
+    [attr.etiqueta]="tx.etiqueta"
+    [attr.precio]="tx.precio"
+  />
   <vixo-transaction-dialog-ui></vixo-transaction-dialog-ui>
 
 <!--

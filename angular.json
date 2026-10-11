@@ -21,7 +21,9 @@
 					},
 					"configurations": {
 						"production": {
-							"target": "wallet-angular:esbuild:production"
+							"target": "wallet-angular:esbuild:production",
+							"baseHref": "/v1/wallet/",
+  						"publicPath": "./"
 						},
 						"development": {
 							"target": "wallet-angular:esbuild:development",
