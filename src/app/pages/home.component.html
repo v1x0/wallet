@@ -14,6 +14,8 @@
 <!-- src/app/pages/home/home.component.html -->
  <div style="width: 60%;margin: auto; text-align: center;">
   <h1>Panel de Control de la Billetera</h1>
+  @if (repositorioListo) {
+    <h1>{{repositorioListo}}</h1>
   <vixo-balance-ui [attr.total]="balanceTotal"></vixo-balance-ui>
   <vixo-transaction-item-ui
     [attr.type]="tx.type"
@@ -24,6 +26,9 @@
     [attr.precio]="tx.precio"
   />
   <vixo-transaction-dialog-ui></vixo-transaction-dialog-ui>
+  } @else {
+    <p>Cargando componentes de la interfaz...</p>
+  }
 
 <!--
   @if (repositorioListo()) {

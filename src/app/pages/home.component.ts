@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef, NgZone, CUSTOM_ELEMENTS_SCHEMA, ViewEncapsulation } from "@angular/core";
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, NgZone, CUSTOM_ELEMENTS_SCHEMA, ViewEncapsulation, ChangeDetectionStrategy } from "@angular/core";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatDividerModule } from '@angular/material/divider';
 import { CommonModule } from "@angular/common";
@@ -10,7 +10,8 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./home.component.scss'],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   imports: [MatDialogModule, MatDividerModule, CommonModule, MatIconModule],
-  encapsulation: ViewEncapsulation.None 
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
 export class HomePage implements OnInit, AfterViewInit {
   balanceTotal: number = 0;
