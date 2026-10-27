@@ -1,27 +1,43 @@
-# WalletAngular
+# wallet-angular
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.8.
+Feature MFE of the wallet: balance, transactions and a dialog to add new ones. It is exposed through Native Federation as `./Routes` and mounted by the shell. Its public contract is in [CONTRACT.md](./CONTRACT.md).
 
-## Development server
+## Development (standalone mode)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+```bash
+npm install
+npm start
+```
 
-## Code scaffolding
+Open `http://localhost:4204/wallet`. In standalone mode `src/app/` plays the role of the shell and mounts `./Routes` under `/wallet`.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+The component library is loaded by remote name (`SharedModule`) from the manifest of each environment:
 
-## Build
+| Environment | Manifest |
+|---|---|
+| Development | `federation_manifests/development/federation.manifest.json` |
+| Production | `federation_manifests/production/federation.manifest.json` |
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+If the library is not available, the wallet uses its own components.
 
-## Running unit tests
+## Build and Tests
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+npm run build
+npm test
+```
 
-## Running end-to-end tests
+Do not run `ng build` while the dev server of this project is running.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Structure
 
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```text
+src/
+├── app/            # standalone root only (never exposed)
+├── routes/         # wallet.routes.ts — exposed as ./Routes
+├── pages/          # wallet_overview
+├── components/     # balance, transaction_item, add_transaction_dialog (fallbacks and internal UI)
+├── services/       # transaction_service (in-memory state until there is a BFF)
+├── models/         # transaction.model.ts
+└── federation/     # component library contract + LibraryLoaderService
+```

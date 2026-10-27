@@ -1,0 +1,19 @@
+@let tx = transaction();
+<article class="transaction" [class.transaction--income]="tx.type === 'income'">
+  <mat-icon class="transaction__icon" aria-hidden="true">
+    {{ tx.type === 'income' ? 'south_west' : 'north_east' }}
+  </mat-icon>
+  <div class="transaction__text">
+    <span class="transaction__description">{{ tx.description }}</span>
+    @if (tx.detail) {
+      <span class="transaction__detail">{{ tx.detail }}</span>
+    }
+    @if (tx.category) {
+      <span class="transaction__category">{{ tx.category }}</span>
+    }
+  </div>
+  <span class="transaction__amount">
+    <span class="transaction__sign">{{ tx.type === 'income' ? 'Ingreso' : 'Gasto' }}:</span>
+    {{ tx.type === 'expense' ? '-' : '+' }}{{ tx.amount | currency: 'MXN' : 'symbol-narrow' }}
+  </span>
+</article>

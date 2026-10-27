@@ -1,0 +1,65 @@
+:host {
+  display: block;
+}
+
+.transaction {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-radius: var(--mat-sys-corner-medium);
+  background-color: var(--mat-sys-surface-container-low);
+}
+
+.transaction__icon {
+  flex-shrink: 0;
+  color: var(--mat-sys-error);
+}
+
+.transaction--income .transaction__icon,
+.transaction--income .transaction__amount {
+  color: var(--mat-sys-tertiary);
+}
+
+.transaction__text {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.transaction__description {
+  font: var(--mat-sys-title-small);
+}
+
+.transaction__detail {
+  color: var(--mat-sys-on-surface-variant);
+  font: var(--mat-sys-body-small);
+  overflow-wrap: anywhere;
+}
+
+.transaction__category {
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 2px 8px;
+  border-radius: var(--mat-sys-corner-full);
+  background-color: var(--mat-sys-secondary-container);
+  color: var(--mat-sys-on-secondary-container);
+  font: var(--mat-sys-label-small);
+}
+
+.transaction__amount {
+  flex-shrink: 0;
+  color: var(--mat-sys-error);
+  font: var(--mat-sys-title-medium);
+}
+
+// Visible only to screen readers: the sign alone is not enough
+.transaction__sign {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

@@ -3,24 +3,12 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "./out-tsc/app",
-    "types": [
-      "node" // Solo deja 'node' si usas SSR, de lo contrario puedes dejarlo vacío []
-    ]
+    "types": []
   },
-  "files": [
-    "src/main.ts"
-  ],
   "include": [
-    "src/**/*.d.ts"
+    "src/**/*.ts"
   ],
-  "angularCompilerOptions": {
-    "extendedDiagnostics": {
-      "checks": {
-        "nullishCoalescingNotNullable": "suppress",
-        "optionalChainNotNullable": "suppress"
-      }
-    }
-  }
+  "exclude": [
+    "src/**/*.spec.ts"
+  ]
 }
-

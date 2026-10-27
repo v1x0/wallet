@@ -1,1 +1,6 @@
-<h2 style="text-align: center;">Balance: {{total | currency:'MXN'}}</h2>
+<section class="balance" aria-label="Balance">
+  <span class="balance__label">Balance</span>
+  <strong class="balance__total" [class.balance__total--negative]="total() < 0">
+    {{ total() | currency: 'MXN' : 'symbol-narrow' }}
+  </strong>
+</section>

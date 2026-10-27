@@ -1,14 +1,15 @@
-import { CurrencyPipe } from "@angular/common";
-import { Component, Input, ChangeDetectionStrategy } from "@angular/core";
+import { CurrencyPipe } from '@angular/common';
+import { Component, input } from '@angular/core';
 
+/** Fallback of `<vixo-balance-ui>` while the component library is not available. */
 @Component({
-  selector: 'balance-wallet',
-  styleUrls: ['./balance.component.scss'],
-  templateUrl: './balance.component.html',
+  selector: 'app-balance',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.Eager,
-  imports: [CurrencyPipe]
+  imports: [CurrencyPipe],
+  templateUrl: './balance.component.html',
+  styleUrls: ['./balance.component.scss'],
 })
-export class BalanceWalletComponent {
-  @Input() total: number = 0
+export class BalanceComponent {
+  /** Incomes minus expenses. */
+  readonly total = input(0);
 }
