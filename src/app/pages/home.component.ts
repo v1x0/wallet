@@ -1,53 +1,43 @@
-import { Component, inject } from "@angular/core";
-import { RecordComponent } from "../../components/record/record.component";
-import { RecordI } from "../../components/record/record.interface";
-
-import { MatDialog, MatDialogModule } from "@angular/material/dialog";
-import { AddRecordContentComponent } from "../../components/addRecordModal/addRecordModalContent.component";
-import { BalanceWalletComponent } from "../../components/balance/balance.component";
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, NgZone, CUSTOM_ELEMENTS_SCHEMA, ViewEncapsulation, ChangeDetectionStrategy } from "@angular/core";
+import { MatDialogModule } from "@angular/material/dialog";
 import { MatDividerModule } from '@angular/material/divider';
+import { CommonModule } from "@angular/common";
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-    selector: 'home-wallet',
-    templateUrl: './home.component.html',
-    styleUrls: ['./home.component.scss'],
-    imports: [RecordComponent, MatDialogModule, BalanceWalletComponent, MatDividerModule]
+  selector: 'home-wallet',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  imports: [MatDialogModule, MatDividerModule, CommonModule, MatIconModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 })
-export class HomePage {
-  public records: Array<RecordI> = []
-  readonly dialog = inject(MatDialog);
-  balanceTotal: number = 0
-  constructor() {
-    this.records.push({
-      amount: 10,
-      category: 'simple',
-      icon: 'fa fa-cutlery',
-      name: 'record 1',
-      type: 'expense'
-    })
-    this.records.push({
-      amount: 11,
-      category: 'simple',
-      icon: 'fa fa-cutlery',
-      name: 'record 1',
-      type: 'income'
-    })
-    this.getBalance()
-  }
+export class HomePage implements OnInit, AfterViewInit {
+  balanceTotal: number = 0;
+  tx = {
+    type: 'income',
+    logoUrl: 'https://flaticon.com',
+    motivo: 'Transferencia Recibida',
+    subtitulo: 'De: Carlos Mendoza - Concepto: Cena',
+    etiqueta: 'Reembolso',
+    precio: 15.00
+  };
 
-  getBalance() {
-    this.balanceTotal = this.records.reduce((acc, record) => record.type === 'expense' ? acc - record.amount : acc + record.amount, 0)
-  }
+  repositorioListo: boolean = false;
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(AddRecordContentComponent);
-    dialogRef.afterClosed().subscribe((result: RecordI) => {
-      if (result !== undefined) {
-        this.records.push({
-          ...result
-        })
-      }
-      this.getBalance()
+  constructor(
+    private readonly cdr: ChangeDetectorRef, 
+    private readonly zone: NgZone
+  ) {}
+
+  ngOnInit() {}
+
+  ngAfterViewInit() {
+    this.zone.run(() => {
+      this.repositorioListo = true;
+      this.cdr.markForCheck();
+      this.cdr.detectChanges();
     });
   }
 }

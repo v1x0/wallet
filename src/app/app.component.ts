@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 @Component({
@@ -6,7 +6,9 @@ import { RouterOutlet } from '@angular/router';
     imports: [RouterOutlet],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    standalone: true
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    encapsulation: ViewEncapsulation.Emulated
 })
 export class AppComponent {
   title = 'wallet-angular';

@@ -5,3 +5,10 @@
   margin: auto;
   width: 500px;
 }
+
+vixo-balance-ui {
+  display: block !important;
+  min-height: 100px;  /* 🚀 Asegura un área mínima visible en pantalla */
+  width: 100%;
+  visibility: visible !important;
+}
