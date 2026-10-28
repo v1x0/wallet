@@ -3,18 +3,25 @@
 
   @if (useLibrary()) {
     <vixo-balance-ui [total]="wallet.balance()"></vixo-balance-ui>
+
+    <div class="wallet__actions">
+      <!-- Renders its own 'Nuevo movimiento' button and emits transactionSaved -->
+      <vixo-transaction-dialog-ui
+        (transactionSaved)="onTransactionSaved($event)"
+      ></vixo-transaction-dialog-ui>
+    </div>
   } @else {
     <!-- Fallback while the component library loads or when it is unavailable -->
     <app-balance [total]="wallet.balance()"></app-balance>
-  }
 
-  <div class="wallet__header">
-    <h2 class="wallet__subtitle">Movimientos</h2>
-    <button mat-flat-button type="button" (click)="openAddDialog()">
-      <mat-icon>add</mat-icon>
-      Agregar movimiento
-    </button>
-  </div>
+    <div class="wallet__header">
+      <h2 class="wallet__subtitle">Movimientos</h2>
+      <button mat-flat-button type="button" (click)="openAddDialog()">
+        <mat-icon>add</mat-icon>
+        Agregar movimiento
+      </button>
+    </div>
+  }
 
   @if (wallet.transactions().length === 0) {
     <p class="wallet__empty">Todavía no hay movimientos.</p>
@@ -26,7 +33,7 @@
             <vixo-transaction-item-ui
               [type]="tx.type"
               [logoUrl]="tx.logoUrl ?? ''"
-              [motivo]="tx.description"
+              motivo="hola mundo"
               [subtitulo]="tx.detail"
               [etiqueta]="tx.category"
               [precio]="tx.amount"
