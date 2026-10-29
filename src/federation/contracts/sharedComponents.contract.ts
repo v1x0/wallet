@@ -1,34 +1,36 @@
-import { Injector } from '@angular/core';
+import { Injector, Type } from '@angular/core';
 import { LibraryDescriptor } from './library.contract';
 
 /**
- * Local contract of the component library `shared-components` (contract version 1.0.0).
+ * Local contract of the component library `components-shared` (contract version 1.0.0).
  * Source imports from the library are forbidden: only the shape of what it exposes is declared here.
  * Inputs can be set as properties or kebab-case attributes; outputs are dispatched as `CustomEvent`.
  */
 
-/** Shape of the library's `./SharedModule` module. */
-export interface SharedComponentsModule {
-  /**
-   * Registers every library tag; uses the host injector when given. Idempotent.
-   * Logs and resolves on failure instead of rejecting, so the loader checks the tags.
-   */
-  bootstrapAllCustomElements(parentInjector?: Injector): Promise<void>;
+export interface CustomElementsModule {
+  /** Catalog of tags ('vixo-*') mapped to their Angular component class. */
+  readonly CUSTOM_ELEMENTS: Record<string, Type<unknown>>;
+  /** Idempotently registers all custom elements using the Angular host Injector. */
+  registerCustomElements(injector: Injector): void;
+  /** Entry point for non-Angular hosts (or hosts that do not share an Injector). */
+  bootstrapCustomElements(): Promise<void>;
 }
 
 export const SHARED_COMPONENTS_TAGS = {
-  balance: 'vixo-balance-ui',
-  transactionItem: 'vixo-transaction-item-ui',
-  transactionDialog: 'vixo-transaction-dialog-ui',
-  fileUpload: 'vixo-file-upload-ui',
+  balance: 'vixo-balance',
+  transactionItem: 'vixo-transaction-item',
+  transactionForm: 'vixo-transaction-form',
+  transactionDialog: 'vixo-transaction-modal-form',
+  fileUpload: 'vixo-file-upload',
 } as const;
 
 export const SHARED_COMPONENTS: LibraryDescriptor = {
   remoteName: 'components-shared',
-  exposedModule: './SharedModule',
+  exposedModule: './CustomElements',
   tags: Object.values(SHARED_COMPONENTS_TAGS),
-  register: (module, injector) =>
-    (module as SharedComponentsModule).bootstrapAllCustomElements(injector),
+  register: (module, injector) => {
+    (module as CustomElementsModule).registerCustomElements(injector);
+  },
 };
 
 export type TransactionType = 'income' | 'expense';
@@ -42,13 +44,13 @@ export type TransactionCategory =
   | 'Servicios'
   | 'Entretenimiento';
 
-/** `<vixo-balance-ui>` — inputs. */
+/** `<vixo-balance>` — inputs. */
 export interface BalanceUiInputs {
   /** Default `0`. */
   total: number;
 }
 
-/** `<vixo-transaction-item-ui>` — inputs. */
+/** `<vixo-transaction-item>` — inputs. */
 export interface TransactionItemUiInputs {
   /** Required. */
   type: TransactionType;
@@ -64,7 +66,7 @@ export interface TransactionItemUiInputs {
   logoUrl: string;
 }
 
-/** Transaction saved by `<vixo-transaction-dialog-ui>`; same shape as the item inputs. */
+/** Transaction saved by `<vixo-transaction-modal-form>`; same shape as the item inputs. */
 export interface TransactionFormValue {
   type: TransactionType;
   /** At least 3 characters. */
@@ -79,13 +81,13 @@ export interface TransactionFormValue {
 }
 
 /**
- * `<vixo-transaction-dialog-ui>` — no inputs; renders its own "Nuevo movimiento" button.
+ * `<vixo-transaction-modal-form>` — renders its own "Nuevo movimiento" button.
  * `transactionSaved` output: `CustomEvent` with the saved transaction in `detail`; the dialog closes itself.
  */
 export type TransactionSaved = CustomEvent<TransactionFormValue>;
 
 /**
- * `<vixo-file-upload-ui>` — no inputs; accepts images, PDF and .docx.
+ * `<vixo-file-upload>` — accepts images, PDF and .docx.
  * `fileChange` output: `CustomEvent` with the chosen file, or `null` when removed, in `detail`.
  */
 export type FileChange = CustomEvent<File | null>;

@@ -2,13 +2,13 @@
   <h1 class="wallet__title">Billetera</h1>
 
   @if (useLibrary()) {
-    <vixo-balance-ui [total]="wallet.balance()"></vixo-balance-ui>
+    <vixo-balance [total]="wallet.balance()"></vixo-balance>
 
     <div class="wallet__actions">
       <!-- Renders its own 'Nuevo movimiento' button and emits transactionSaved -->
-      <vixo-transaction-dialog-ui
+      <vixo-transaction-modal-form
         (transactionSaved)="onTransactionSaved($event)"
-      ></vixo-transaction-dialog-ui>
+      ></vixo-transaction-modal-form>
     </div>
   } @else {
     <!-- Fallback while the component library loads or when it is unavailable -->
@@ -30,14 +30,14 @@
       @for (tx of wallet.transactions(); track tx.id) {
         <li>
           @if (useLibrary()) {
-            <vixo-transaction-item-ui
+            <vixo-transaction-item
               [type]="tx.type"
               [logoUrl]="tx.logoUrl ?? ''"
-              motivo="hola mundo"
+              [motivo]="tx.motivo"
               [subtitulo]="tx.detail"
               [etiqueta]="tx.category"
               [precio]="tx.amount"
-            ></vixo-transaction-item-ui>
+            ></vixo-transaction-item>
           } @else {
             <app-transaction-item [transaction]="tx"></app-transaction-item>
           }

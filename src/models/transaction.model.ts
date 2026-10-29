@@ -11,6 +11,7 @@ export interface Transaction {
   category: string;
   /** Always positive; `type` gives the sign. */
   amount: number;
+  motivo: string;
   logoUrl?: string;
 }
 

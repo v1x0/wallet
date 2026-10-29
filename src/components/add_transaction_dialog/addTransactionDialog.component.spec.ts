@@ -24,7 +24,9 @@ describe('AddTransactionDialogComponent', () => {
   }
 
   function errors(): (string | undefined)[] {
-    return Array.from(element.querySelectorAll('.add-transaction__error')).map((e) => e.textContent?.trim());
+    return Array.from(element.querySelectorAll('.add-transaction__error')).map((e) =>
+      e.textContent?.trim(),
+    );
   }
 
   beforeEach(async () => {
@@ -62,6 +64,7 @@ describe('AddTransactionDialogComponent', () => {
       detail: 'Viernes',
       category: 'Ocio',
       amount: 120.5,
+      motivo: '',
     });
   });
 

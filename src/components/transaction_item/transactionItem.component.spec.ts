@@ -13,6 +13,7 @@ describe('TransactionItemComponent', () => {
     detail: 'Compra semanal',
     category: 'Comida',
     amount: 10,
+    motivo: 'Supermercado',
   };
 
   async function render(transaction: Transaction): Promise<void> {

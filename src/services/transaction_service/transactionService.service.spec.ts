@@ -20,6 +20,7 @@ describe('TransactionService', () => {
       detail: '',
       category: 'Ocio',
       amount: 20,
+      motivo: 'Cine',
     });
 
     expect(created.id).toMatch(/^tx-/);

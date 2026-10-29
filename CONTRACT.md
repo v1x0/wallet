@@ -9,7 +9,7 @@ Feature MFE (type 2) that shows the wallet balance and its transactions and lets
 | Dev `remoteEntry.json` | `http://localhost:4204/remoteEntry.json` |
 | Production `remoteEntry.json` | `/v1/wallet/remoteEntry.json` |
 | Suggested registry entry | `path: 'wallet'`, `title: 'Billetera'`, `icon: 'account_balance_wallet'`, `roles: []` |
-| Component libraries used | `SharedModule` (`./CustomElements`): `vixo-balance-ui`, `vixo-transaction-item-ui` |
+| Component libraries used | `components-shared` (`./CustomElements`): `vixo-balance`, `vixo-transaction-item`, `vixo-transaction-modal-form`, `vixo-file-upload` |
 | Required roles | None |
 | Platform events | None published or consumed |
 
@@ -23,13 +23,13 @@ Exports `routes: Routes`, relative to the top-level path the shell assigns:
 
 ## Host Requirements
 
-- Federation manifest lists `SharedModule`. If it cannot be loaded, the wallet falls back to its own components (`app-balance`, `app-transaction-item`).
+- Federation manifest lists `components-shared`. If it cannot be loaded, the wallet falls back to its own components (`app-balance`, `app-transaction-item`).
 - Angular Material theme and Material Symbols font provided by the host.
+- Provides `PLATFORM_SESSION` from `@vixo/platform-contracts` (optional in standalone mode).
 
 ## Known Limitations
 
 - There is no BFF endpoint yet: transactions are kept in memory (`TransactionService`), seeded with sample data, and are lost on reload.
-- The inputs of the library elements were inferred from their previous usage (`src/federation/contracts/`); confirm them with the library team.
 
 ## Versioning
 

@@ -22,6 +22,7 @@ export class AddTransactionDialogComponent {
   protected readonly category = signal('');
   protected readonly amount = signal('');
   protected readonly type = signal<TransactionType>('expense');
+  protected readonly motivo = signal('');
   protected readonly submitted = signal(false);
 
   protected readonly descriptionError = computed(() =>
@@ -51,6 +52,7 @@ export class AddTransactionDialogComponent {
       detail: this.detail().trim(),
       category: this.category().trim(),
       amount: Number(this.amount()),
+      motivo: this.motivo().trim()
     });
   }
 

@@ -2,13 +2,14 @@ import { CUSTOM_ELEMENTS_SCHEMA, Component, computed, inject } from '@angular/co
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { PLATFORM_SESSION } from '@vixo/platform-contracts';
 import { AddTransactionDialogComponent } from '../../components/add_transaction_dialog';
 import { BalanceComponent } from '../../components/balance';
 import { TransactionItemComponent } from '../../components/transaction_item';
+import { FileChange, TransactionSaved } from '../../federation/contracts/sharedComponents.contract';
+import { SharedComponentsLoaderService } from '../../federation/shared_components_loader';
 import { NewTransaction } from '../../models/transaction.model';
 import { TransactionService } from '../../services/transaction_service';
-import { SharedComponentsLoaderService } from '../../federation/shared_components_loader';
-import { FileChange, TransactionSaved } from '../../federation/contracts/sharedComponents.contract'
 
 @Component({
   selector: 'app-wallet-overview',
@@ -20,6 +21,7 @@ import { FileChange, TransactionSaved } from '../../federation/contracts/sharedC
 })
 export class WalletOverviewComponent {
   private readonly dialog = inject(MatDialog);
+  protected readonly session = inject(PLATFORM_SESSION, { optional: true });
   protected readonly libraries = inject(SharedComponentsLoaderService);
   protected readonly wallet = inject(TransactionService);
 
@@ -37,23 +39,29 @@ export class WalletOverviewComponent {
     void this.libraries.ensureElements();
   }
 
-  /** Handler for the `transactionSaved` CustomEvent dispatched by `<vixo-transaction-dialog-ui>`. */
+  /** Handler for the `transactionSaved` CustomEvent dispatched by `<vixo-transaction-modal-form>`. */
   protected onTransactionSaved(event: Event): void {
-    const customEvent = event as TransactionSaved;
-    if (customEvent.detail) {
-      this.wallet.add(customEvent.detail as any);
+    const { detail } = event as TransactionSaved;
+    if (detail) {
+      this.wallet.add({
+        type: detail.type,
+        description: detail.motivo,
+        detail: detail.subtitulo,
+        category: detail.etiqueta,
+        amount: Number(detail.precio),
+        motivo: detail.motivo,
+        ...(detail.logoUrl ? { logoUrl: detail.logoUrl } : {}),
+      });
     }
   }
 
-  /** Handler for the `fileChange` CustomEvent dispatched by `<vixo-file-upload-ui>`. */
+  /** Handler for the `fileChange` CustomEvent dispatched by `<vixo-file-upload>`. */
   protected onFileChange(event: Event): void {
     const customEvent = event as FileChange;
     const file = customEvent.detail;
     if (file) {
-      // Handle uploaded file (e.g., attach to state or upload service)
       console.log('File selected:', file);
     } else {
-      // Handle file removal
       console.log('File removed');
     }
   }

@@ -9,6 +9,7 @@ const SAMPLE_TRANSACTIONS: Transaction[] = [
     detail: 'De: Carlos Mendoza - Concepto: Cena',
     category: 'Reembolso',
     amount: 15,
+    motivo: 'motivo 1'
   },
   {
     id: 'tx-2',
@@ -17,6 +18,7 @@ const SAMPLE_TRANSACTIONS: Transaction[] = [
     detail: 'Compra semanal',
     category: 'Comida',
     amount: 10,
+    motivo: 'motivo 2'
   },
 ];
 
