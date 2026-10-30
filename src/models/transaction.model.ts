@@ -7,8 +7,10 @@ export interface Transaction {
   description: string;
   /** Secondary text (e.g. "De: Carlos Mendoza - Concepto: Cena"). */
   detail: string;
-  /** Short tag (e.g. "Reembolso"). */
+  /** Short category (e.g. "Reembolso"). */
   category: string;
+  /** Optional user-defined labels attached to the movement. */
+  labels?: readonly string[];
   /** Always positive; `type` gives the sign. */
   amount: number;
   motivo: string;

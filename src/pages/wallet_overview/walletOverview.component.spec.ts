@@ -1,28 +1,30 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialog } from '@angular/material/dialog';
+import { provideRouter } from '@angular/router';
 import { of } from 'rxjs';
-import {
-  SHARED_COMPONENTS_TAGS,
-  TransactionFormValue,
-} from '../../federation/contracts/sharedComponents.contract';
+import { SHARED_COMPONENTS_TAGS } from '../../federation/contracts/sharedComponents.contract';
 import {
   SHARED_COMPONENTS_REMOTE_LOADER,
   SharedComponentsLoaderService,
 } from '../../federation/shared_components_loader';
 import { NewTransaction } from '../../models/transaction.model';
+import { CatalogService } from '../../services/catalog_service';
 import { WalletOverviewComponent } from './walletOverview.component';
 
 describe('WalletOverviewComponent', () => {
   let fixture: ComponentFixture<WalletOverviewComponent>;
   let element: HTMLElement;
   let dialogResult: NewTransaction | undefined;
+  let openDialogSpy: ReturnType<typeof vi.fn>;
 
   async function setup(loader: () => Promise<unknown>): Promise<void> {
+    openDialogSpy = vi.fn(() => ({ afterClosed: () => of(dialogResult) }));
     await TestBed.configureTestingModule({
       imports: [WalletOverviewComponent],
       providers: [
+        provideRouter([]),
         { provide: SHARED_COMPONENTS_REMOTE_LOADER, useValue: loader },
-        { provide: MatDialog, useValue: { open: () => ({ afterClosed: () => of(dialogResult) }) } },
+        { provide: MatDialog, useValue: { open: openDialogSpy } },
       ],
     }).compileComponents();
     fixture = TestBed.createComponent(WalletOverviewComponent);
@@ -53,9 +55,15 @@ describe('WalletOverviewComponent', () => {
   describe('with the component library', () => {
     beforeEach(() => setup(async () => ({ registerCustomElements: defineLibraryTags })));
 
-    it('uses the library elements with the documented properties', () => {
+    it('uses the library elements and shows navigation links to create categories and labels without rendering catalog lists on the main page', () => {
       const balance = element.querySelector('vixo-balance') as HTMLElement & { total: number };
       expect(balance.total).toBe(5);
+
+      const links = Array.from(element.querySelectorAll('a.wallet__catalog-link')).map((a) =>
+        a.getAttribute('href'),
+      );
+      expect(links).toEqual(['/catalog/category', '/catalog/label']);
+      expect(element.querySelector('app-catalog-manager')).toBeNull();
 
       const items = element.querySelectorAll('vixo-transaction-item');
       expect(items.length).toBe(2);
@@ -68,24 +76,41 @@ describe('WalletOverviewComponent', () => {
       expect(element.querySelector('app-balance')).toBeNull();
     });
 
-    it('adds the transaction emitted by vixo-transaction-modal-form', async () => {
-      const modalForm = element.querySelector('vixo-transaction-modal-form') as HTMLElement;
-      expect(modalForm).not.toBeNull();
-
-      const payload: TransactionFormValue = {
-        type: 'income',
-        motivo: 'Bono',
-        subtitulo: 'Empresa',
-        etiqueta: 'Salario',
-        precio: 100,
-        logoUrl: '',
-      };
-      modalForm.dispatchEvent(new CustomEvent('transactionSaved', { detail: payload }));
+    it('opens the modal with catalog categories and labels and adds the saved transaction', async () => {
+      const catalog = TestBed.inject(CatalogService);
+      catalog.addCategory('Cripto');
+      catalog.addLabel('Largo plazo');
       await render();
+
+      dialogResult = {
+        type: 'income',
+        description: 'Compra BTC',
+        detail: 'Exchange',
+        category: 'Cripto',
+        labels: ['Largo plazo'],
+        amount: 100,
+        motivo: 'Compra BTC',
+      };
+
+      (element.querySelector('.wallet__header button') as HTMLButtonElement).click();
+      await render();
+
+      expect(openDialogSpy).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          data: expect.objectContaining({
+            categories: expect.arrayContaining(['Cripto']),
+            labels: expect.arrayContaining(['Largo plazo']),
+          }),
+        }),
+      );
 
       const items = element.querySelectorAll('vixo-transaction-item');
       expect(items.length).toBe(3);
-      expect((items[0] as HTMLElement & { motivo: string }).motivo).toBe('Bono');
+      const createdItem = items[0] as HTMLElement & Record<string, unknown>;
+      expect(createdItem['motivo']).toBe('Compra BTC');
+      expect(createdItem['etiqueta']).toBe('Cripto');
+      expect(createdItem['subtitulo']).toBe('Exchange · Etiquetas: Largo plazo');
       expect((element.querySelector('vixo-balance') as HTMLElement & { total: number }).total).toBe(
         105,
       );
@@ -94,7 +119,6 @@ describe('WalletOverviewComponent', () => {
 
   describe('with a library that does not define the wallet tags', () => {
     beforeEach(() => {
-      // jsdom keeps custom element definitions between tests: simulate the missing tags
       vi.spyOn(customElements, 'get').mockReturnValue(undefined);
       return setup(async () => ({ registerCustomElements: () => {} }));
     });
@@ -117,22 +141,37 @@ describe('WalletOverviewComponent', () => {
       expect(element.querySelectorAll('app-transaction-item').length).toBe(2);
     });
 
-    it('adds the transaction returned by the fallback dialog', async () => {
+    it('passes custom categories and labels to the modal dialog and adds the transaction', async () => {
+      const catalog = TestBed.inject(CatalogService);
+      catalog.addCategory('Hogar');
+      catalog.addLabel('Prioritario');
+      await render();
+
       dialogResult = {
         type: 'income',
         description: 'Bono',
         detail: '',
-        category: 'Salario',
+        category: 'Hogar',
+        labels: ['Prioritario'],
         amount: 100,
         motivo: 'Bono',
       };
       (element.querySelector('.wallet__header button') as HTMLButtonElement).click();
       await render();
 
+      expect(openDialogSpy).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          data: expect.objectContaining({
+            categories: expect.arrayContaining(['Hogar']),
+            labels: expect.arrayContaining(['Prioritario']),
+          }),
+        }),
+      );
       expect(element.querySelectorAll('app-transaction-item').length).toBe(3);
     });
 
-    it('does nothing when the fallback dialog is cancelled', async () => {
+    it('does nothing when the modal dialog is cancelled', async () => {
       (element.querySelector('.wallet__header button') as HTMLButtonElement).click();
       await render();
       expect(element.querySelectorAll('app-transaction-item').length).toBe(2);

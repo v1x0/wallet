@@ -12,6 +12,7 @@ describe('TransactionItemComponent', () => {
     description: 'Supermercado',
     detail: 'Compra semanal',
     category: 'Comida',
+    labels: ['Personal', 'Recurrente'],
     amount: 10,
     motivo: 'Supermercado',
   };
@@ -31,11 +32,15 @@ describe('TransactionItemComponent', () => {
     element = fixture.nativeElement as HTMLElement;
   });
 
-  it('renders an expense with a negative amount', async () => {
+  it('renders an expense with a negative amount, category, and labels', async () => {
     await render(expense);
     expect(text('.transaction__description')).toBe('Supermercado');
     expect(text('.transaction__detail')).toBe('Compra semanal');
     expect(text('.transaction__category')).toBe('Comida');
+    const labels = Array.from(element.querySelectorAll('.transaction__label')).map((el) =>
+      el.textContent?.trim(),
+    );
+    expect(labels).toEqual(['Personal', 'Recurrente']);
     expect(text('.transaction__amount')).toBe('Gasto: -$10.00');
     expect(element.querySelector('.transaction--income')).toBeNull();
   });
@@ -46,9 +51,10 @@ describe('TransactionItemComponent', () => {
     expect(element.querySelector('.transaction--income')).not.toBeNull();
   });
 
-  it('hides empty detail and category', async () => {
-    await render({ ...expense, detail: '', category: '' });
+  it('hides empty detail, category and labels', async () => {
+    await render({ ...expense, detail: '', category: '', labels: [] });
     expect(element.querySelector('.transaction__detail')).toBeNull();
     expect(element.querySelector('.transaction__category')).toBeNull();
+    expect(element.querySelector('.transaction__label')).toBeNull();
   });
 });

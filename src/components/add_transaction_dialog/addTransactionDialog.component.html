@@ -13,7 +13,12 @@
 
     <mat-form-field appearance="outline">
       <mat-label>Descripción</mat-label>
-      <input matInput name="description" [value]="description()" (input)="description.set(valueOf($event))" />
+      <input
+        matInput
+        name="description"
+        [value]="description()"
+        (input)="description.set(valueOf($event))"
+      />
     </mat-form-field>
     @if (descriptionError()) {
       <p class="add-transaction__error" role="alert">{{ descriptionError() }}</p>
@@ -24,10 +29,95 @@
       <input matInput name="detail" [value]="detail()" (input)="detail.set(valueOf($event))" />
     </mat-form-field>
 
+    <!-- Searchable Category Dropdown Input with Debounce and Arrow Icon -->
     <mat-form-field appearance="outline">
       <mat-label>Categoría</mat-label>
-      <input matInput name="category" [value]="category()" (input)="category.set(valueOf($event))" />
+      <input
+        matInput
+        name="category"
+        placeholder="Escribe para buscar categoría..."
+        [value]="categorySearchInput()"
+        [matAutocomplete]="categoryAuto"
+        (input)="onCategorySearchInput(valueOf($event))"
+      />
+      <mat-icon matSuffix class="add-transaction__dropdown-icon" aria-hidden="true">
+        arrow_drop_down
+      </mat-icon>
+      <mat-autocomplete
+        #categoryAuto="matAutocomplete"
+        (optionSelected)="selectCategory($event.option.value)"
+      >
+        @for (cat of filteredCategories(); track cat) {
+          <mat-option [value]="cat">{{ cat }}</mat-option>
+        }
+      </mat-autocomplete>
     </mat-form-field>
+
+    @if (selectedCategory()) {
+      <div class="add-transaction__selected-group">
+        <mat-chip-set aria-label="Categoría seleccionada">
+          <mat-chip
+            class="add-transaction__selected-category"
+            (removed)="clearCategory()"
+          >
+            {{ selectedCategory() }}
+            <button
+              matChipRemove
+              type="button"
+              [attr.aria-label]="'Quitar categoría ' + selectedCategory()"
+            >
+              <mat-icon>cancel</mat-icon>
+            </button>
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+    }
+
+    <!-- Searchable Labels Dropdown Input with Debounce and Arrow Icon -->
+    <mat-form-field appearance="outline">
+      <mat-label>Etiquetas (Labels)</mat-label>
+      <input
+        matInput
+        name="labelSearch"
+        placeholder="Escribe para buscar etiquetas..."
+        [value]="labelSearchInput()"
+        [matAutocomplete]="labelAuto"
+        (input)="onLabelSearchInput(valueOf($event))"
+      />
+      <mat-icon matSuffix class="add-transaction__dropdown-icon" aria-hidden="true">
+        arrow_drop_down
+      </mat-icon>
+      <mat-autocomplete
+        #labelAuto="matAutocomplete"
+        (optionSelected)="selectLabel($event.option.value)"
+      >
+        @for (label of filteredLabels(); track label) {
+          <mat-option [value]="label">{{ label }}</mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+
+    @if (selectedLabels().length > 0) {
+      <div class="add-transaction__selected-group">
+        <mat-chip-set aria-label="Etiquetas seleccionadas">
+          @for (selected of selectedLabels(); track selected) {
+            <mat-chip
+              class="add-transaction__selected-label"
+              (removed)="removeSelectedLabel(selected)"
+            >
+              {{ selected }}
+              <button
+                matChipRemove
+                type="button"
+                [attr.aria-label]="'Quitar etiqueta ' + selected"
+              >
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+          }
+        </mat-chip-set>
+      </div>
+    }
 
     <mat-form-field appearance="outline" floatLabel="always">
       <mat-label>Monto</mat-label>

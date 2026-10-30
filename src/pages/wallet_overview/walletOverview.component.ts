@@ -2,19 +2,29 @@ import { CUSTOM_ELEMENTS_SCHEMA, Component, computed, inject } from '@angular/co
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 import { PLATFORM_SESSION } from '@vixo/platform-contracts';
-import { AddTransactionDialogComponent } from '../../components/add_transaction_dialog';
+import {
+  AddTransactionDialogComponent,
+  AddTransactionDialogData,
+} from '../../components/add_transaction_dialog';
 import { BalanceComponent } from '../../components/balance';
 import { TransactionItemComponent } from '../../components/transaction_item';
-import { FileChange, TransactionSaved } from '../../federation/contracts/sharedComponents.contract';
 import { SharedComponentsLoaderService } from '../../federation/shared_components_loader';
 import { NewTransaction } from '../../models/transaction.model';
+import { CatalogService } from '../../services/catalog_service';
 import { TransactionService } from '../../services/transaction_service';
 
 @Component({
   selector: 'app-wallet-overview',
   standalone: true,
-  imports: [BalanceComponent, TransactionItemComponent, MatButtonModule, MatIconModule],
+  imports: [
+    RouterLink,
+    BalanceComponent,
+    TransactionItemComponent,
+    MatButtonModule,
+    MatIconModule,
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './walletOverview.component.html',
   styleUrls: ['./walletOverview.component.scss'],
@@ -23,6 +33,7 @@ export class WalletOverviewComponent {
   private readonly dialog = inject(MatDialog);
   protected readonly session = inject(PLATFORM_SESSION, { optional: true });
   protected readonly libraries = inject(SharedComponentsLoaderService);
+  protected readonly catalog = inject(CatalogService);
   protected readonly wallet = inject(TransactionService);
 
   /** All required library custom element tags sourced directly from the service. */
@@ -39,41 +50,33 @@ export class WalletOverviewComponent {
     void this.libraries.ensureElements();
   }
 
-  /** Handler for the `transactionSaved` CustomEvent dispatched by `<vixo-transaction-modal-form>`. */
-  protected onTransactionSaved(event: Event): void {
-    const { detail } = event as TransactionSaved;
-    if (detail) {
-      this.wallet.add({
-        type: detail.type,
-        description: detail.motivo,
-        detail: detail.subtitulo,
-        category: detail.etiqueta,
-        amount: Number(detail.precio),
-        motivo: detail.motivo,
-        ...(detail.logoUrl ? { logoUrl: detail.logoUrl } : {}),
-      });
-    }
-  }
-
-  /** Handler for the `fileChange` CustomEvent dispatched by `<vixo-file-upload>`. */
-  protected onFileChange(event: Event): void {
-    const customEvent = event as FileChange;
-    const file = customEvent.detail;
-    if (file) {
-      console.log('File selected:', file);
-    } else {
-      console.log('File removed');
-    }
-  }
-
-  /** Fallback dialog trigger when native custom elements are unavailable. */
+  /** Opens the modal dialog passing all categories and labels so the user can search with debounce. */
   protected openAddDialog(): void {
     this.dialog
-      .open<AddTransactionDialogComponent, void, NewTransaction>(AddTransactionDialogComponent)
+      .open<AddTransactionDialogComponent, AddTransactionDialogData, NewTransaction>(
+        AddTransactionDialogComponent,
+        {
+          data: {
+            categories: this.catalog.categories(),
+            labels: this.catalog.labels(),
+          },
+        },
+      )
       .afterClosed()
       .subscribe((transaction) => {
         if (transaction) {
-          this.wallet.add(transaction);
+          const formattedDetail =
+            transaction.labels && transaction.labels.length > 0
+              ? [transaction.detail, `Etiquetas: ${transaction.labels.join(', ')}`]
+                  .filter(Boolean)
+                  .join(' · ')
+              : transaction.detail;
+
+          this.wallet.add({
+            ...transaction,
+            detail: formattedDetail,
+            motivo: transaction.motivo || transaction.description,
+          });
         }
       });
   }

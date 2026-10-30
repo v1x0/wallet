@@ -1,0 +1,82 @@
+<div class="catalog-page">
+  <header class="catalog-page__header">
+    <a mat-button routerLink="../.." class="catalog-page__back">
+      <mat-icon>arrow_back</mat-icon>
+      Volver a billetera
+    </a>
+    <h1 class="catalog-page__title">{{ pageTitle() }}</h1>
+  </header>
+
+  <nav class="catalog-page__switcher" aria-label="Tipo de elemento">
+    <a
+      mat-stroked-button
+      [routerLink]="['..', 'category']"
+      [class.catalog-page__tab--active]="isCategory()"
+      [attr.aria-current]="isCategory() ? 'page' : null"
+    >
+      <mat-icon>category</mat-icon>
+      Categoría
+    </a>
+    <a
+      mat-stroked-button
+      [routerLink]="['..', 'label']"
+      [class.catalog-page__tab--active]="!isCategory()"
+      [attr.aria-current]="!isCategory() ? 'page' : null"
+    >
+      <mat-icon>label</mat-icon>
+      Etiqueta
+    </a>
+  </nav>
+
+  @if (loading()) {
+    <p class="catalog-page__loading" role="status">Cargando catálogo...</p>
+  } @else {
+    <form class="catalog-page__form" novalidate (submit)="save($event)">
+      <mat-form-field appearance="outline" class="catalog-page__field">
+        <mat-label>{{ fieldLabel() }}</mat-label>
+        <input
+          matInput
+          name="catalogName"
+          [placeholder]="placeholder()"
+          [value]="name()"
+          (input)="onNameInput($event)"
+        />
+      </mat-form-field>
+
+      @if (errorMessage()) {
+        <p class="catalog-page__error" role="alert">{{ errorMessage() }}</p>
+      }
+
+      <div class="catalog-page__actions">
+        <a mat-button routerLink="../..">Cancelar</a>
+        <button mat-flat-button type="submit">
+          <mat-icon>check</mat-icon>
+          {{ isCategory() ? 'Guardar categoría' : 'Guardar etiqueta' }}
+        </button>
+      </div>
+    </form>
+
+    <section class="catalog-page__existing" [attr.aria-label]="isCategory() ? 'Categorías actuales' : 'Etiquetas actuales'">
+      <h2 class="catalog-page__subtitle">
+        {{ isCategory() ? 'Categorías registradas' : 'Etiquetas registradas' }}
+      </h2>
+
+      @if (currentItems().length === 0) {
+        <p class="catalog-page__empty">
+          {{ isCategory() ? 'Todavía no hay categorías registradas.' : 'Todavía no hay etiquetas registradas.' }}
+        </p>
+      } @else {
+        <mat-chip-set class="catalog-page__chips">
+          @for (item of currentItems(); track item) {
+            <mat-chip (removed)="removeItem(item)">
+              {{ item }}
+              <button matChipRemove type="button" [attr.aria-label]="'Eliminar ' + item">
+                <mat-icon>cancel</mat-icon>
+              </button>
+            </mat-chip>
+          }
+        </mat-chip-set>
+      }
+    </section>
+  }
+</div>

@@ -8,8 +8,15 @@
     @if (tx.detail) {
       <span class="transaction__detail">{{ tx.detail }}</span>
     }
-    @if (tx.category) {
-      <span class="transaction__category">{{ tx.category }}</span>
+    @if (tx.category || (tx.labels && tx.labels.length > 0)) {
+      <div class="transaction__tags">
+        @if (tx.category) {
+          <span class="transaction__category">{{ tx.category }}</span>
+        }
+        @for (label of tx.labels ?? []; track label) {
+          <span class="transaction__label">{{ label }}</span>
+        }
+      </div>
     }
   </div>
   <span class="transaction__amount">

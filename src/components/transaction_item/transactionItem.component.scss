@@ -38,13 +38,26 @@
   overflow-wrap: anywhere;
 }
 
-.transaction__category {
-  align-self: flex-start;
+.transaction__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
   margin-top: 4px;
+}
+
+.transaction__category {
   padding: 2px 8px;
   border-radius: var(--mat-sys-corner-full);
   background-color: var(--mat-sys-secondary-container);
   color: var(--mat-sys-on-secondary-container);
+  font: var(--mat-sys-label-small);
+}
+
+.transaction__label {
+  padding: 2px 8px;
+  border-radius: var(--mat-sys-corner-full);
+  background-color: var(--mat-sys-tertiary-container);
+  color: var(--mat-sys-on-tertiary-container);
   font: var(--mat-sys-label-small);
 }
 

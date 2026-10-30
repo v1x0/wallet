@@ -31,6 +31,13 @@
   gap: 8px;
 }
 
+.wallet__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
 .wallet__list {
   display: flex;
   flex-direction: column;
@@ -45,7 +52,7 @@
   color: var(--mat-sys-on-surface-variant);
 }
 
-vixo-balance-ui,
-vixo-transaction-item-ui {
+vixo-balance,
+vixo-transaction-item {
   display: block;
 }
